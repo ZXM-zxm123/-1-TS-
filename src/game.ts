@@ -260,7 +260,7 @@ export class DungeonCrawlerGame {
         const cell = this.floorManager.getCellAt(position);
         if (!cell) return;
         
-        const trapDamage = this.floorManager.getTrapDamageAt(position);
+        const trapDamage = this.floorManager.triggerTrapAt(position);
         if (trapDamage > 0) {
             this.playerManager.takeDamage(trapDamage);
         }
