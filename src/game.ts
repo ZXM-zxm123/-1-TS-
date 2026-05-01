@@ -260,9 +260,15 @@ export class DungeonCrawlerGame {
         const cell = this.floorManager.getCellAt(position);
         if (!cell) return;
         
-        const trapDamage = this.floorManager.getTrapDamageAt(position);
+        const trapDamage = this.floorManager.triggerTrapAt(position);
         if (trapDamage > 0) {
             this.playerManager.takeDamage(trapDamage);
+            
+            this.updateUI();
+            
+            this.flashCellAtPosition(position);
+            this.flashPlayerCell();
+            this.showFloatingText(position, `-${trapDamage}`, 'damage');
         }
         
         const item = this.floorManager.collectItemAt(position);
@@ -363,6 +369,16 @@ export class DungeonCrawlerGame {
         }
         if (this.statsElements.health) {
             this.statsElements.health.textContent = player.health.toString();
+            
+            const healthPercent = player.health / player.maxHealth;
+            const healthStatDiv = this.statsElements.health.closest('.stat');
+            if (healthStatDiv) {
+                if (healthPercent <= 0.3) {
+                    healthStatDiv.classList.add('health-low');
+                } else {
+                    healthStatDiv.classList.remove('health-low');
+                }
+            }
         }
         if (this.statsElements.maxHealth) {
             this.statsElements.maxHealth.textContent = player.maxHealth.toString();
@@ -522,6 +538,59 @@ export class DungeonCrawlerGame {
             default:
                 return null;
         }
+    }
+    
+    private showFloatingText(position: Position, text: string, type: 'damage' | 'heal'): void {
+        if (!this.gameMapElement) return;
+        
+        const mapRect = this.gameMapElement.getBoundingClientRect();
+        const cellSize = 40;
+        
+        const floatText = document.createElement('div');
+        floatText.className = `floating-text ${type}`;
+        floatText.textContent = text;
+        
+        const x = position.x * cellSize + cellSize / 2;
+        const y = position.y * cellSize;
+        
+        floatText.style.left = `${x}px`;
+        floatText.style.top = `${y}px`;
+        
+        this.gameMapElement.appendChild(floatText);
+        
+        setTimeout(() => {
+            floatText.remove();
+        }, 1000);
+    }
+    
+    private flashCellAtPosition(position: Position): void {
+        if (!this.gameMapElement) return;
+        
+        const rows = this.gameMapElement.querySelectorAll('.row');
+        if (rows[position.y]) {
+            const cells = rows[position.y].querySelectorAll('.cell');
+            if (cells[position.x]) {
+                const cell = cells[position.x] as HTMLElement;
+                cell.classList.add('damage-flash');
+                
+                setTimeout(() => {
+                    cell.classList.remove('damage-flash');
+                }, 300);
+            }
+        }
+    }
+    
+    private flashPlayerCell(): void {
+        if (!this.gameMapElement) return;
+        
+        const playerCells = this.gameMapElement.querySelectorAll('.cell.player');
+        playerCells.forEach(cell => {
+            cell.classList.add('damage');
+            
+            setTimeout(() => {
+                cell.classList.remove('damage');
+            }, 300);
+        });
     }
 }
 

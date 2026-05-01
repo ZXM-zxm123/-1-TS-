@@ -241,3 +241,74 @@ h1 {
 .hidden {
     display: none !important;
 }
+
+.cell.damage-flash {
+    animation: damageFlash 0.3s ease-in-out;
+}
+
+@keyframes damageFlash {
+    0%, 100% {
+        background-color: transparent;
+    }
+    50% {
+        background-color: rgba(255, 0, 0, 0.5);
+    }
+}
+
+.player.damage {
+    animation: playerDamageShake 0.3s ease-in-out;
+}
+
+@keyframes playerDamageShake {
+    0%, 100% {
+        transform: translateX(0);
+    }
+    25% {
+        transform: translateX(-3px);
+    }
+    75% {
+        transform: translateX(3px);
+    }
+}
+
+.floating-text {
+    position: absolute;
+    font-weight: bold;
+    font-size: 18px;
+    pointer-events: none;
+    z-index: 100;
+    animation: floatUp 1s ease-out forwards;
+}
+
+.floating-text.damage {
+    color: #ff4444;
+}
+
+.floating-text.heal {
+    color: #44ff44;
+}
+
+@keyframes floatUp {
+    0% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    100% {
+        opacity: 0;
+        transform: translateY(-30px);
+    }
+}
+
+#stats .stat.health-low {
+    color: #ff4444;
+    animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.5;
+    }
+}
