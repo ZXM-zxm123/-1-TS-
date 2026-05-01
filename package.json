@@ -1,0 +1,17 @@
+{
+  "name": "dungeon-crawler",
+  "version": "1.0.0",
+  "description": "A 10x10 grid dungeon crawler game with TypeScript",
+  "main": "dist/game.js",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "start": "npx serve ."
+  },
+  "keywords": ["dungeon", "crawler", "game", "typescript"],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "typescript": "^5.0.0"
+  }
+}
