@@ -156,6 +156,20 @@ export class FloorManager {
         return 0;
     }
     
+    public triggerTrapAt(position: Position): number {
+        if (!this.currentFloor) return 0;
+        
+        const cell = this.currentFloor.grid[position.y][position.x];
+        if (cell.type === CellType.TRAP) {
+            const damage = cell.trapDamage;
+            cell.type = CellType.EMPTY;
+            cell.trapDamage = 0;
+            return damage;
+        }
+        
+        return 0;
+    }
+    
     public updateFloor(): void {
         if (!this.currentFloor) return;
         
